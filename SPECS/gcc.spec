@@ -149,7 +149,7 @@ BuildRequires: scl-utils-build
 Summary: GCC version %{gcc_major}
 Name: %{?scl_prefix}gcc
 Version: %{gcc_version}
-Release: %{gcc_release}%{?dist}
+Release: %{gcc_release}.1%{?dist}
 # libgcc, libgfortran, libgomp, libstdc++ and crtstuff have
 # GCC Runtime Exception.
 License: GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD
@@ -331,6 +331,9 @@ Patch10: gcc13-rh1574936.patch
 Patch11: gcc13-d-shared-libphobos.patch
 Patch12: gcc13-znver5.patch
 Patch13: gcc13-pr107071.patch
+Patch14: gcc13-vector-merge-1.patch
+Patch15: gcc13-vector-merge-2.patch
+Patch16: gcc13-vector-merge-3.patch
 
 Patch50: isl-rh2155127.patch
 
@@ -698,6 +701,9 @@ so that there cannot be any synchronization problems.
 %patch -P11 -p0 -b .d-shared-libphobos~
 %patch -P12 -p1 -b .znver5~
 %patch -P13 -p1 -b .pr107071~
+%patch -P14 -p1 -b .vector-merge-1~
+%patch -P15 -p1 -b .vector-merge-2~
+%patch -P16 -p1 -b .vector-merge-3~
 
 %if 0%{?rhel} >= 6
 %patch -P100 -p1 -b .fortran-fdec-duplicates~
@@ -2909,6 +2915,9 @@ fi
 %endif
 
 %changelog
+* Fri Jul 12 2024 Marek Polacek <polacek@redhat.com> 13.3.1-2.1
+- fix wrong RTL patterns for vector merge high/low word on LE (RHEL-45190)
+
 * Tue Jun 11 2024 Marek Polacek <polacek@redhat.com> 13.3.1-2
 - update from releases/gcc-13 branch
   - PRs ada/114398, ada/114708, c/114493, c++/111529, c++/113598,
