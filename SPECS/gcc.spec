@@ -149,7 +149,7 @@ BuildRequires: scl-utils-build
 Summary: GCC version %{gcc_major}
 Name: %{?scl_prefix}gcc
 Version: %{gcc_version}
-Release: %{gcc_release}.1%{?dist}
+Release: %{gcc_release}.2%{?dist}
 # libgcc, libgfortran, libgomp, libstdc++ and crtstuff have
 # GCC Runtime Exception.
 License: GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD
@@ -806,6 +806,10 @@ rm -rf libgomp/testsuite/libgomp.fortran/pr90030.f90
 rm -f libstdc++-v3/testsuite/30_threads/future/members/poll.cc
 %endif
 
+# Disable jQuery use (CVE-2020-11023).
+sed -i '/^SEARCHENGINE/s/YES/NO/' libstdc++-v3/doc/doxygen/user.cfg.in
+sed -i '/^GENERATE_TREEVIEW/s/YES/NO/' libstdc++-v3/doc/doxygen/user.cfg.in
+
 %build
 
 # Undo the broken autoconf change in recent Fedora versions
@@ -1373,6 +1377,9 @@ cp -r -p $libstdcxx_doc_builddir/html ../rpm.doc/libstdc++-v3/html/api
 mkdir -p %{buildroot}%{_mandir}/man3
 cp -r -p $libstdcxx_doc_builddir/man/man3/* %{buildroot}%{_mandir}/man3/
 find ../rpm.doc/libstdc++-v3 -name \*~ | xargs rm
+# We don't want to ship jQuery in the libstdc++-docs package.
+find ../rpm.doc/libstdc++-v3 -name jquery.js | xargs rm
+find ../rpm.doc/libstdc++-v3/html -name '*.html' | xargs sed -i '/<script type="text.javascript" src="jquery.js"><.script>/d'
 %endif
 
 %ifarch sparcv9 sparc64
@@ -2915,6 +2922,9 @@ fi
 %endif
 
 %changelog
+* Fri Feb  7 2025 Marek Polacek <polacek@redhat.com> 13.3.1-2.2
+- disable jQuery use, don't ship jquery.js (CVE-2020-11023, RHEL-78279)
+
 * Fri Jul 12 2024 Marek Polacek <polacek@redhat.com> 13.3.1-2.1
 - fix wrong RTL patterns for vector merge high/low word on LE (RHEL-45191)
 
