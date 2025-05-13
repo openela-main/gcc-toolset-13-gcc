@@ -149,7 +149,7 @@ BuildRequires: scl-utils-build
 Summary: GCC version %{gcc_major}
 Name: %{?scl_prefix}gcc
 Version: %{gcc_version}
-Release: %{gcc_release}.2%{?dist}
+Release: %{gcc_release}.3%{?dist}
 # libgcc, libgfortran, libgomp, libstdc++ and crtstuff have
 # GCC Runtime Exception.
 License: GPLv3+ and GPLv3+ with exceptions and GPLv2+ with exceptions and LGPLv2+ and BSD
@@ -2922,8 +2922,11 @@ fi
 %endif
 
 %changelog
+* Fri Feb 14 2025 Marek Polacek <polacek@redhat.com> 13.3.1-2.3
+- bump for another rebuild (RHEL-78382)
+
 * Fri Feb  7 2025 Marek Polacek <polacek@redhat.com> 13.3.1-2.2
-- disable jQuery use, don't ship jquery.js (CVE-2020-11023, RHEL-78378)
+- disable jQuery use, don't ship jquery.js (CVE-2020-11023, RHEL-78382)
 
 * Fri Jul 12 2024 Marek Polacek <polacek@redhat.com> 13.3.1-2.1
 - fix wrong RTL patterns for vector merge high/low word on LE (RHEL-45190)
